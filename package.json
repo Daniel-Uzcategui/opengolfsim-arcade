@@ -1,0 +1,32 @@
+{
+  "name": "opengolfsim-arcade",
+  "version": "1.0.0",
+  "description": "Tour-quality arcade minigames for OpenGolfSim (FUSE Engine) with direct Launch Monitor integration (Garmin R10, GSPro OpenAPI, Springbok, MLM2PRO).",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "beerpong": "electron . BeerPong",
+    "ctf": "electron . CaptureTheFlag",
+    "cornhole": "electron . Cornhole",
+    "install:ogs:win": "powershell -ExecutionPolicy Bypass -File scripts/windows/install_to_regular_ogs.ps1",
+    "install:ogs:linux": "bash scripts/linux/install_to_regular_ogs.sh"
+  },
+  "keywords": [
+    "opengolfsim",
+    "golf-simulator",
+    "fuse-engine",
+    "threejs",
+    "webgpu",
+    "rapier3d",
+    "gspro",
+    "garmin-r10",
+    "mlm2pro",
+    "beerpong",
+    "capture-the-flag"
+  ],
+  "author": "Daniel Uzcategui",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.2.0"
+  }
+}

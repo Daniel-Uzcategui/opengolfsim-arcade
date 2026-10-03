@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Capture The Flag - OpenGolfSim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <script type="module" crossorigin src="./assets/ctf-1OyRAK_-.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/base-CPp2Xu_E.js">
+    <link rel="modulepreload" crossorigin href="./assets/index-CqgNokvH.js">
+    <link rel="modulepreload" crossorigin href="./assets/gen_fairway_map-B1kEKBsk.js">
+    <link rel="modulepreload" crossorigin href="./assets/player-DvO2z_T9.js">
+    <link rel="modulepreload" crossorigin href="./assets/UIStats-DQPpJ-PM.js">
+    <link rel="modulepreload" crossorigin href="./assets/golfBall-CD8CWh0U.js">
+    <link rel="stylesheet" crossorigin href="./assets/base-Xcqjeygc.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-W4JQEYLH.css">
+    <link rel="stylesheet" crossorigin href="./assets/ctf-CJnlIPwO.css">
+  </head>
+  <body style="opacity: 0">
+    <canvas id="canvas"></canvas>
+
+    <!-- Top Center: Active Flag Target, Controller & Quick Selector -->
+    <div id="top-center">
+      <!-- Territory Control / Dominance Tug-of-War Bar -->
+      <div class="dominance-wrapper">
+        <div class="dom-header">
+          <span class="dom-label">TERRITORY DOMINANCE</span>
+          <div class="wind-hud" id="wind-hud" title="Live Course Wind Condition">
+            <span class="wind-arrow" id="wind-arrow">&#10148;</span>
+            <span class="wind-label" id="wind-text">5 MPH NE</span>
+          </div>
+          <span class="dom-stats" id="dom-stats-text">10 FLAGS OPEN</span>
+        </div>
+        <div class="dominance-bar" id="dominance-bar">
+          <div class="dom-segment red" id="dom-red" style="width: 0%"></div>
+          <div class="dom-segment blue" id="dom-blue" style="width: 0%"></div>
+          <div class="dom-segment green" id="dom-green" style="width: 0%"></div>
+          <div class="dom-segment yellow" id="dom-yellow" style="width: 0%"></div>
+          <div class="dom-segment neutral" id="dom-neutral" style="width: 100%"></div>
+        </div>
+      </div>
+
+      <!-- Target Navigation & Status Card -->
+      <div class="target-control-container">
+        <button id="btn-prev-flag" class="flag-nav-btn" title="Target Previous Flag (or [ key / Tab)">&#9664;</button>
+
+        <div class="flag-target-card">
+          <div class="target-header">
+            <span class="flag-badge" id="flag-badge">Flag 1 of 10</span>
+            <button id="btn-drone-cam" class="btn-green-preview" title="Flyover Aerial Inspection of Target Green (V key)">
+              ðŸš Green Cam
+            </button>
+            <span class="flag-owner-pill neutral" id="flag-owner-pill">Neutral (Unclaimed)</span>
+          </div>
+          <div class="target-main">
+            <div class="target-distance">
+              <span class="digit" id="target-dist-val">65</span>
+              <span class="unit" id="target-dist-unit">YDS</span>
+            </div>
+            <div class="target-meta">
+              <div class="club-rec" id="club-rec">Club: Lob Wedge</div>
+              <div class="flag-best-holder" id="flag-best-holder">Record: Open for capture!</div>
+            </div>
+          </div>
+          <div class="aim-angle-row">
+            <span class="aim-text" id="aim-angle-display">Target Aim: Dead Center (0.0Â°)</span>
+            <div class="aim-btn-group">
+              <button id="btn-nudge-left-2" class="btn-aim-nudge" title="Nudge 2Â° Left">-2Â°</button>
+              <button id="btn-recenter-aim" class="btn-recenter" title="Re-center aim directly at the flag pin (C key)">Center</button>
+              <button id="btn-nudge-right-2" class="btn-aim-nudge" title="Nudge 2Â° Right">+2Â°</button>
+            </div>
+          </div>
+        </div>
+
+        <button id="btn-next-flag" class="flag-nav-btn" title="Target Next Flag (or ] key / Tab)">&#9654;</button>
+      </div>
+
+      <!-- Quick Flag Selector Row (10 Flags) -->
+      <div class="flag-selector-strip" id="flag-selector-strip">
+        <!-- Rendered dynamically: Flag 1 to 10 pills -->
+      </div>
+
+      <!-- Current Turn & 3-Shot Indicators -->
+      <div id="turn-banner" class="red">
+        <span id="turn-player-name">RED TEAM'S TURN (SHOT 1/3)</span>
+        <div class="shot-pips" id="shot-pips">
+          <div class="shot-pip active" id="pip-0"></div>
+          <div class="shot-pip" id="pip-1"></div>
+          <div class="shot-pip" id="pip-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Right: Scoreboard & Team Configuration -->
+    <div id="scoreboard">
+      <div class="round-status-box">
+        <div class="round-title" id="round-title">Round 1 of 10</div>
+        <div class="round-subtitle">Closest Ball Captures Flag</div>
+        
+        <!-- Team Count Selector -->
+        <div class="team-count-selector">
+          <span class="team-count-label">Teams:</span>
+          <button class="team-btn active" data-teams="2" id="btn-teams-2">2</button>
+          <button class="team-btn" data-teams="3" id="btn-teams-3">3</button>
+          <button class="team-btn" data-teams="4" id="btn-teams-4">4</button>
+        </div>
+      </div>
+
+      <!-- Container for Dynamic Team Cards (Red, Blue, Green, Yellow) -->
+      <div id="team-cards-container">
+        <!-- Rendered by TypeScript -->
+      </div>
+    </div>
+
+    <!-- Interactive Range Radar Minimap (Bottom Right) -->
+    <div id="radar-container" class="radar-card">
+      <div class="radar-header">
+        <div class="radar-title-box">
+          <span class="radar-dot"></span>
+          <span class="radar-title">RANGE RADAR</span>
+        </div>
+        <span class="radar-sub" id="radar-target-tag">Target: Flag 1 (65y)</span>
+      </div>
+      <canvas id="radar-canvas" width="220" height="300"></canvas>
+      <div class="radar-footer">
+        <span>Click flag to aim</span>
+        <button id="btn-mute" class="radar-mute-btn" title="Mute/Unmute Audio (M key)">ðŸ”Š</button>
+      </div>
+    </div>
+
+    <!-- Live Flight Telemetry Card (Appears after shot) -->
+    <div id="telemetry-card" class="telemetry-card">
+      <div class="telem-row">
+        <div class="telem-item">
+          <span class="telem-val" id="telem-speed">--</span>
+          <span class="telem-lbl">SPEED (MPH)</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-val" id="telem-vla">--</span>
+          <span class="telem-lbl">LAUNCH VLA</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-val" id="telem-spin">--</span>
+          <span class="telem-lbl">SPIN (RPM)</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-val" id="telem-apex">--</span>
+          <span class="telem-lbl">APEX (YD)</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-val" id="telem-carry">--</span>
+          <span class="telem-lbl">CARRY</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-val" id="telem-deviation">0.0y</span>
+          <span class="telem-lbl">OFFLINE</span>
+        </div>
+        <div class="telem-item highlight">
+          <span class="telem-val" id="telem-dist">--</span>
+          <span class="telem-lbl">TOTAL YDS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bullseye Dart Special Celebration Modal -->
+    <div id="bullseye-modal">
+      <div class="bullseye-card">
+        <span class="bullseye-badge">ðŸŽ¯ BULLSEYE DART!</span>
+        <h2 class="bullseye-title" id="bullseye-title">INSIDE THE BULLSEYE!</h2>
+        <div class="bullseye-desc" id="bullseye-desc">3.4 FT TO THE PIN</div>
+      </div>
+    </div>
+
+    <!-- Drone Green Flyover Overlay -->
+    <div id="flyover-hud" class="flyover-hud">
+      <div class="flyover-card">
+        <div class="flyover-tag">ðŸš AERIAL GREEN INSPECTION</div>
+        <div class="flyover-sub">Inspecting Target Green &bull; Press <kbd>V</kbd> or click to return</div>
+      </div>
+    </div>
+
+    <!-- Celebration Modal for Flag Capture / Steal -->
+    <div id="capture-modal">
+      <span class="modal-badge" id="modal-badge">FLAG CAPTURED!</span>
+      <h2 class="modal-winner red" id="modal-winner">RED CLAIMS FLAG 4!</h2>
+      <div class="modal-details" id="modal-details">Distance: 6.4 ft (Stolen from Blue!)</div>
+    </div>
+
+    <!-- Game Over Screen & Match MVP Recap -->
+    <div id="game-over">
+      <div class="game-over-card">
+        <h1 class="game-over-title red" id="game-over-winner">RED TEAM WINS!</h1>
+        <div class="game-over-subtitle" id="game-over-sub">10-Round Match Complete</div>
+        
+        <div class="final-scores" id="final-scores-container">
+          <!-- Rendered dynamically for 2, 3, or 4 teams -->
+        </div>
+
+        <div class="match-mvp-box">
+          <div class="mvp-row">
+            <span class="mvp-lbl">ðŸŽ¯ Closest Pin Dart:</span>
+            <span class="mvp-val" id="mvp-closest">--</span>
+          </div>
+          <div class="mvp-row">
+            <span class="mvp-lbl">âš”ï¸ Most Flag Steals:</span>
+            <span class="mvp-val" id="mvp-steals">--</span>
+          </div>
+          <div class="mvp-row">
+            <span class="mvp-lbl">ðŸš€ Longest Bomb Capture:</span>
+            <span class="mvp-val" id="mvp-longest">--</span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="btn-exit">Exit Game</button>
+          <button class="btn btn-primary" id="btn-replay">Play Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Proximity Feedback Banner on Shot Rest -->
+    <div id="shot-banner" class="shot-banner">
+      <span id="shot-banner-badge" class="shot-banner-badge red">RED SHOT 1</span>
+      <span id="shot-banner-dist" class="shot-banner-dist">8.4 FT TO PIN</span>
+    </div>
+
+    <!-- Bottom HUD: Interactive Test Controls & Aim Pan Controls -->
+    <div id="bottom-hud">
+      <div class="test-controls-bar">
+        <!-- Aim Controls -->
+        <button id="btn-aim-left" class="btn-hud" title="Nudge Aim Left (Left Arrow or A key)">
+          <kbd>&larr;</kbd> Aim Left
+        </button>
+        <button id="btn-aim-right" class="btn-hud" title="Nudge Aim Right (Right Arrow or D key)">
+          Aim Right <kbd>&rarr;</kbd>
+        </button>
+        
+        <!-- Shot Type Controls -->
+        <button id="btn-hit-sim" class="btn-hud btn-hit-main" title="Spacebar: Launch shot targeting current flag with natural dispersion">
+          <kbd>Space</kbd> Hit Shot
+        </button>
+        <button id="btn-hit-pin" class="btn-hud" title="P key: Dead-center dart to selected pin">
+          <kbd>P</kbd> Pin Hunter
+        </button>
+        <button id="btn-hit-short" class="btn-hud" title="1 key: Mishit short of target green">
+          <kbd>1</kbd> Short
+        </button>
+        <button id="btn-hit-long" class="btn-hud" title="2 key: Missed long past target green">
+          <kbd>2</kbd> Long
+        </button>
+        <button id="btn-hit-left" class="btn-hud" title="3 key: Pull / Hook left">
+          <kbd>3</kbd> Hook
+        </button>
+        <button id="btn-hit-right" class="btn-hud" title="4 key: Push / Slice right">
+          <kbd>4</kbd> Slice
+        </button>
+        <button id="btn-mulligan" class="btn-hud" title="Mulligan / Rehit shot (Z key)">
+          <kbd>Z</kbd> Mulligan
+        </button>
+        <button id="btn-drone-cam-bottom" class="btn-hud" title="Aerial Flyover of Target Green (V key)">
+          <kbd>V</kbd> Green Cam
+        </button>
+      </div>
+      <div class="test-shot-hint">
+        Aim: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> / <kbd>A</kbd> <kbd>D</kbd> &bull; Flags: <kbd>1</kbd>-<kbd>0</kbd> or <kbd>Tab</kbd> &bull; Center: <kbd>C</kbd> &bull; Flyover: <kbd>V</kbd> &bull; Real Launch Monitors track your exact custom aim angle!
+      </div>
+    </div>
+
+    <!-- Top Left Menu / Status Container -->
+    <div id="top-left"></div>
+
+    <div id="bottom-status">
+      <div id="render-stats"></div>
+      <div id="lm-status"></div>
+    </div>
+  </body>
+</html>
+

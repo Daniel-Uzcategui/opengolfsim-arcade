@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OpenGolfSim - Arcade Suite</title>
+  <link rel="stylesheet" href="styles/menu.css">
+</head>
+<body>
+  <div class="header">
+    <div class="top-badges">
+      <div class="engine-badge">
+        <span>&#x26F3; FUSE ENGINE RUNTIME (WEBGPU)</span>
+      </div>
+      <div class="lm-badge" id="lm-badge">
+        <div class="lm-dot" id="lm-dot"></div>
+        <span id="lm-status-text">LM BRIDGE ACTIVE: GSPRO (9210) &amp; OGS (3111)</span>
+      </div>
+    </div>
+    <h1>OpenGolfSim Arcade</h1>
+    <p class="subtitle">Select a minigame below or hit a shot from your launch monitor to auto-launch</p>
+  </div>
+
+  <div class="games-grid">
+    <!-- Beer Pong Card -->
+    <div class="game-card beer-pong" onclick="launchGame('BeerPong')">
+      <div class="card-icon">&#x1F37A;</div>
+      <div class="card-title">Beer Pong Golf</div>
+      <div class="card-desc">
+        Tour-grade tournament beer pong with procedural solo cups, acrylic deck roll-ins, realistic cup rim bounces, live streak tracking, and 15–200 yard target distances.
+      </div>
+      <div class="card-features">
+        <span class="feature-tag">Solo &amp; Versus</span>
+        <span class="feature-tag">15Y - 200Y</span>
+        <span class="feature-tag">Roll-In &amp; Swish</span>
+        <span class="feature-tag">3D Click Target</span>
+      </div>
+      <button class="play-btn btn-beer">&#x25B6; PLAY BEER PONG</button>
+    </div>
+
+    <!-- Capture The Flag Card -->
+    <div class="game-card capture-the-flag" onclick="launchGame('CaptureTheFlag')">
+      <div class="card-icon">&#x1F3C1;</div>
+      <div class="card-title">Capture The Flag</div>
+      <div class="card-desc">
+        10-round arcade territory showdown! Dial in precision distances across every club in your bag from 65 to 280 yards, capture target rings, and dominate the leaderboard.
+      </div>
+      <div class="card-features">
+        <span class="feature-tag">Territory Control</span>
+        <span class="feature-tag">65Y - 280Y</span>
+        <span class="feature-tag">Target Rings</span>
+        <span class="feature-tag">Smooth Aim Tilt</span>
+      </div>
+      <button class="play-btn btn-ctf">&#x25B6; PLAY CAPTURE THE FLAG</button>
+    </div>
+
+    <!-- Cornhole Card -->
+    <div class="game-card cornhole" onclick="launchGame('Cornhole')">
+      <div class="card-icon">&#x1FA81;</div>
+      <div class="card-title">Cornhole Golf</div>
+      <div class="card-desc">
+        Beachside arcade pitch challenge. Master delicate pitch and chip shots onto regulation cornhole boards with authentic slider physics and hole-in scoring.
+      </div>
+      <div class="card-features">
+        <span class="feature-tag">Board Sliders</span>
+        <span class="feature-tag">Pitch &amp; Chip</span>
+        <span class="feature-tag">Hole-In Scoring</span>
+        <span class="feature-tag">2-Team Play</span>
+      </div>
+      <button class="play-btn btn-cornhole">&#x25B6; PLAY CORNHOLE</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span><kbd>F11</kbd> Fullscreen</span>
+    <span><kbd>Esc</kbd> Return to Menu</span>
+    <span><kbd>A</kbd> / <kbd>D</kbd> or <kbd>&larr;</kbd> <kbd>&rarr;</kbd> Aim Tilt &amp; Target Cycle</span>
+    <span><kbd>C</kbd> Target Camera</span>
+    <span><kbd>Space</kbd> Simulated Shot</span>
+  </div>
+
+  <script>
+    function launchGame(name) {
+      if (window.arcadeAPI && typeof window.arcadeAPI.launchGame === 'function') {
+        window.arcadeAPI.launchGame(name);
+      } else {
+        // Fallback for direct browser preview
+        window.location.href = '../games/' + name + '/index.html';
+      }
+    }
+
+    // Listen for launch monitor status updates if running inside Electron
+    if (window.arcadeAPI && typeof window.arcadeAPI.onLaunchMonitorStatus === 'function') {
+      window.arcadeAPI.onLaunchMonitorStatus((status) => {
+        const textEl = document.getElementById('lm-status-text');
+        if (textEl && status.message) {
+          textEl.textContent = status.message;
+        }
+      });
+    }
+  </script>
+</body>
+</html>
