@@ -12,13 +12,17 @@ It features direct hardware integration with radar and camera launch monitors (i
 
 ---
 
+![OpenGolfSim Arcade Hub](screenshots/arcade_hub.png)
+
+---
+
 ## 🎮 Included Minigames
 
-| Game | Description | Key Features |
-| :--- | :--- | :--- |
-| **🍺 Beer Pong Golf** | Tournament-style beer pong with solo cups arranged in a 10-cup pyramid. | • 15 to 200 Yard Range<br>• Swish & Rim-Bounce Physics<br>• Interactive 3D Click-to-Target<br>• Mountain Vista Style Camera Aim Tilt |
-| **🚩 Capture The Flag** | 10-round arcade territory showdown across all clubs in your bag. | • 65 to 280 Yard Targets<br>• Ground Territory Rings<br>• Real-time Leaderboards<br>• Precise Distance Dial-In |
-| **🎯 Cornhole Golf** | Beachside pitching and chipping challenge onto regulation cornhole boards. | • Authentic Wood Slider Physics<br>• Hole-in Scoring<br>• 2-Team Versus Play |
+| Game | Preview | Key Features |
+| :--- | :---: | :--- |
+| **🍺 Beer Pong Golf**<br>Tournament beer pong into 10 solo cups. | <img src="screenshots/beer_pong.png" width="360" alt="Beer Pong Golf" /> | • 15Y to 200Y Target Distances<br>• Swish & Rim-Bounce Physics<br>• Interactive 3D Click-to-Target<br>• Mountain Vista Style Aim Tilt |
+| **🚩 Capture The Flag**<br>10-round showdown across all clubs. | <img src="screenshots/capture_the_flag.png" width="360" alt="Capture The Flag" /> | • 65Y to 280Y Flag Distances<br>• Territory Control Rings<br>• Real-time Leaderboards<br>• Dynamic Wind & Lie Variations |
+| **🎯 Cornhole Golf**<br>Beachside pitching & chipping challenge. | <img src="screenshots/cornhole.png" width="360" alt="Cornhole Golf" /> | • Authentic Board Slider Physics<br>• Hole-in-One 3-Point Scoring<br>• 2-Team Competitive Match<br>• Distance Tuning |
 
 ---
 
