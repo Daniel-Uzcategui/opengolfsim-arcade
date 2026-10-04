@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('arcadeAPI', {
-  launchGame: (gameName) => ipcRenderer.send('launch-game', gameName),
+  launchGame: (gameName, options) => ipcRenderer.send('launch-game', gameName, options),
   returnToMenu: () => ipcRenderer.send('return-menu'),
   getConnectionStatus: () => ipcRenderer.invoke('get-connection-status'),
   onLaunchMonitorStatus: (callback) => {

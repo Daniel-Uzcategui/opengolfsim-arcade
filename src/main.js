@@ -68,13 +68,14 @@ function loadMenu() {
   mainWindow.setTitle('OpenGolfSim Arcade Hub');
 }
 
-function loadGame(gameName) {
+function loadGame(gameName, options) {
   if (!mainWindow) return;
   const gamePath = resolveGameHtml(gameName);
   if (gamePath) {
     console.log(`[Launcher] Loading game: ${gameName} from ${gamePath}`);
     currentGame = gameName;
-    mainWindow.loadFile(gamePath);
+    const query = (options && options.quality) ? { quality: options.quality } : {};
+    mainWindow.loadFile(gamePath, { query });
     mainWindow.setTitle(`OpenGolfSim - ${gameName}`);
   } else {
     console.error(`[Launcher] Game not found: ${gameName}`);
@@ -365,8 +366,8 @@ function createWindow(targetGame = null) {
   });
 
   // IPC handlers
-  ipcMain.on('launch-game', (_event, gameName) => {
-    loadGame(gameName);
+  ipcMain.on('launch-game', (_event, gameName, options) => {
+    loadGame(gameName, options);
   });
 
   ipcMain.on('return-menu', () => {

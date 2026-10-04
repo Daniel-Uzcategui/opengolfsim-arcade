@@ -1,19 +1,20 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <title>Capture The Flag - OpenGolfSim</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <script type="module" crossorigin src="./assets/ctf-1OyRAK_-.js"></script>
+    <script type="module" crossorigin src="./assets/ctf-NJpg-kek.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/base-CPp2Xu_E.js">
-    <link rel="modulepreload" crossorigin href="./assets/index-CqgNokvH.js">
-    <link rel="modulepreload" crossorigin href="./assets/gen_fairway_map-B1kEKBsk.js">
-    <link rel="modulepreload" crossorigin href="./assets/player-DvO2z_T9.js">
-    <link rel="modulepreload" crossorigin href="./assets/UIStats-DQPpJ-PM.js">
-    <link rel="modulepreload" crossorigin href="./assets/golfBall-CD8CWh0U.js">
+    <link rel="modulepreload" crossorigin href="./assets/index-BTHvJPAi.js">
+    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-lHHRyJ06.js">
+    <link rel="modulepreload" crossorigin href="./assets/rangeMtns-DiBmqyLl.js">
+    <link rel="modulepreload" crossorigin href="./assets/UIStats-ASJdNwdn.js">
+    <link rel="modulepreload" crossorigin href="./assets/golfBall-2OmTWUGX.js">
+    <link rel="modulepreload" crossorigin href="./assets/player-DVEcW8XN.js">
     <link rel="stylesheet" crossorigin href="./assets/base-Xcqjeygc.css">
     <link rel="stylesheet" crossorigin href="./assets/index-W4JQEYLH.css">
-    <link rel="stylesheet" crossorigin href="./assets/ctf-CJnlIPwO.css">
+    <link rel="stylesheet" crossorigin href="./assets/ctf-DecM3M9L.css">
   </head>
   <body style="opacity: 0">
     <canvas id="canvas"></canvas>
@@ -47,7 +48,7 @@
           <div class="target-header">
             <span class="flag-badge" id="flag-badge">Flag 1 of 10</span>
             <button id="btn-drone-cam" class="btn-green-preview" title="Flyover Aerial Inspection of Target Green (V key)">
-              ðŸš Green Cam
+              🚁 Green Cam
             </button>
             <span class="flag-owner-pill neutral" id="flag-owner-pill">Neutral (Unclaimed)</span>
           </div>
@@ -62,11 +63,11 @@
             </div>
           </div>
           <div class="aim-angle-row">
-            <span class="aim-text" id="aim-angle-display">Target Aim: Dead Center (0.0Â°)</span>
+            <span class="aim-text" id="aim-angle-display">Target Aim: Dead Center (0.0°)</span>
             <div class="aim-btn-group">
-              <button id="btn-nudge-left-2" class="btn-aim-nudge" title="Nudge 2Â° Left">-2Â°</button>
+              <button id="btn-nudge-left-2" class="btn-aim-nudge" title="Nudge 2° Left">-2°</button>
               <button id="btn-recenter-aim" class="btn-recenter" title="Re-center aim directly at the flag pin (C key)">Center</button>
-              <button id="btn-nudge-right-2" class="btn-aim-nudge" title="Nudge 2Â° Right">+2Â°</button>
+              <button id="btn-nudge-right-2" class="btn-aim-nudge" title="Nudge 2° Right">+2°</button>
             </div>
           </div>
         </div>
@@ -103,6 +104,17 @@
           <button class="team-btn" data-teams="3" id="btn-teams-3">3</button>
           <button class="team-btn" data-teams="4" id="btn-teams-4">4</button>
         </div>
+
+        <!-- Graphics Quality Selector -->
+        <div class="quality-widget">
+          <span class="q-label">GRAPHICS:</span>
+          <div class="q-btns">
+            <button class="q-btn" data-quality="low" id="q-low">LOW</button>
+            <button class="q-btn" data-quality="medium" id="q-med">MED</button>
+            <button class="q-btn" data-quality="high" id="q-high">HIGH</button>
+            <button class="q-btn active" data-quality="epic" id="q-epic">EPIC</button>
+          </div>
+        </div>
       </div>
 
       <!-- Container for Dynamic Team Cards (Red, Blue, Green, Yellow) -->
@@ -123,7 +135,7 @@
       <canvas id="radar-canvas" width="220" height="300"></canvas>
       <div class="radar-footer">
         <span>Click flag to aim</span>
-        <button id="btn-mute" class="radar-mute-btn" title="Mute/Unmute Audio (M key)">ðŸ”Š</button>
+        <button id="btn-mute" class="radar-mute-btn" title="Mute/Unmute Audio (M key)">🔊</button>
       </div>
     </div>
 
@@ -164,7 +176,7 @@
     <!-- Bullseye Dart Special Celebration Modal -->
     <div id="bullseye-modal">
       <div class="bullseye-card">
-        <span class="bullseye-badge">ðŸŽ¯ BULLSEYE DART!</span>
+        <span class="bullseye-badge">🎯 BULLSEYE DART!</span>
         <h2 class="bullseye-title" id="bullseye-title">INSIDE THE BULLSEYE!</h2>
         <div class="bullseye-desc" id="bullseye-desc">3.4 FT TO THE PIN</div>
       </div>
@@ -173,7 +185,7 @@
     <!-- Drone Green Flyover Overlay -->
     <div id="flyover-hud" class="flyover-hud">
       <div class="flyover-card">
-        <div class="flyover-tag">ðŸš AERIAL GREEN INSPECTION</div>
+        <div class="flyover-tag">🚁 AERIAL GREEN INSPECTION</div>
         <div class="flyover-sub">Inspecting Target Green &bull; Press <kbd>V</kbd> or click to return</div>
       </div>
     </div>
@@ -197,15 +209,15 @@
 
         <div class="match-mvp-box">
           <div class="mvp-row">
-            <span class="mvp-lbl">ðŸŽ¯ Closest Pin Dart:</span>
+            <span class="mvp-lbl">🎯 Closest Pin Dart:</span>
             <span class="mvp-val" id="mvp-closest">--</span>
           </div>
           <div class="mvp-row">
-            <span class="mvp-lbl">âš”ï¸ Most Flag Steals:</span>
+            <span class="mvp-lbl">⚔️ Most Flag Steals:</span>
             <span class="mvp-val" id="mvp-steals">--</span>
           </div>
           <div class="mvp-row">
-            <span class="mvp-lbl">ðŸš€ Longest Bomb Capture:</span>
+            <span class="mvp-lbl">🚀 Longest Bomb Capture:</span>
             <span class="mvp-val" id="mvp-longest">--</span>
           </div>
         </div>
@@ -223,45 +235,67 @@
       <span id="shot-banner-dist" class="shot-banner-dist">8.4 FT TO PIN</span>
     </div>
 
-    <!-- Bottom HUD: Interactive Test Controls & Aim Pan Controls -->
+    <!-- Bottom HUD: Interactive Tournament Action Bar & Controls -->
     <div id="bottom-hud">
-      <div class="test-controls-bar">
-        <!-- Aim Controls -->
-        <button id="btn-aim-left" class="btn-hud" title="Nudge Aim Left (Left Arrow or A key)">
-          <kbd>&larr;</kbd> Aim Left
+      <!-- Main Action Buttons Row -->
+      <div class="hud-main-actions">
+        <button id="btn-hit-sim" class="hud-btn-action hud-btn-gold" title="Space: Launch shot targeting current flag with natural dispersion">
+          <span class="btn-icon">🎯</span>
+          <span class="btn-text">Hit Shot</span>
+          <kbd class="hud-kbd">Space</kbd>
         </button>
-        <button id="btn-aim-right" class="btn-hud" title="Nudge Aim Right (Right Arrow or D key)">
-          Aim Right <kbd>&rarr;</kbd>
-        </button>
-        
-        <!-- Shot Type Controls -->
-        <button id="btn-hit-sim" class="btn-hud btn-hit-main" title="Spacebar: Launch shot targeting current flag with natural dispersion">
-          <kbd>Space</kbd> Hit Shot
-        </button>
-        <button id="btn-hit-pin" class="btn-hud" title="P key: Dead-center dart to selected pin">
-          <kbd>P</kbd> Pin Hunter
-        </button>
-        <button id="btn-hit-short" class="btn-hud" title="1 key: Mishit short of target green">
-          <kbd>1</kbd> Short
-        </button>
-        <button id="btn-hit-long" class="btn-hud" title="2 key: Missed long past target green">
-          <kbd>2</kbd> Long
-        </button>
-        <button id="btn-hit-left" class="btn-hud" title="3 key: Pull / Hook left">
-          <kbd>3</kbd> Hook
-        </button>
-        <button id="btn-hit-right" class="btn-hud" title="4 key: Push / Slice right">
-          <kbd>4</kbd> Slice
-        </button>
-        <button id="btn-mulligan" class="btn-hud" title="Mulligan / Rehit shot (Z key)">
-          <kbd>Z</kbd> Mulligan
-        </button>
-        <button id="btn-drone-cam-bottom" class="btn-hud" title="Aerial Flyover of Target Green (V key)">
-          <kbd>V</kbd> Green Cam
+        <button id="btn-hit-pin" class="hud-btn-action hud-btn-cyan" title="P: Precision dead-center dart to selected pin">
+          <span class="btn-icon">⚡</span>
+          <span class="btn-text">Pin Hunter</span>
+          <kbd class="hud-kbd">P</kbd>
         </button>
       </div>
+
+      <!-- Secondary Controls & Testing Bar -->
+      <div class="test-controls-bar">
+        <div class="hud-ctrl-group">
+          <button id="btn-aim-left" class="btn-hud" title="Nudge Aim Left (Left Arrow or A key)">
+            <kbd>&larr;</kbd> Aim Left
+          </button>
+          <button id="btn-aim-right" class="btn-hud" title="Nudge Aim Right (Right Arrow or D key)">
+            Aim Right <kbd>&rarr;</kbd>
+          </button>
+        </div>
+
+        <div class="hud-ctrl-group">
+          <button id="btn-drone-cam-bottom" class="btn-hud" title="Aerial Flyover of Target Green (V key)">
+            🚁 Green Cam <kbd>V</kbd>
+          </button>
+          <button id="btn-mulligan" class="btn-hud" title="Mulligan / Rehit shot (Z key)">
+            ↺ Mulligan <kbd>Z</kbd>
+          </button>
+        </div>
+
+        <!-- Compact Shot Variance Testing Pills -->
+        <div class="hud-test-cluster">
+          <span class="test-cluster-lbl">Simulate:</span>
+          <button id="btn-hit-short" class="btn-mini-test" title="Mishit short of target green (1 key)"><kbd>1</kbd> Short</button>
+          <button id="btn-hit-long" class="btn-mini-test" title="Missed long past target green (2 key)"><kbd>2</kbd> Long</button>
+          <button id="btn-hit-left" class="btn-mini-test" title="Pull / Hook left (3 key)"><kbd>3</kbd> Hook</button>
+          <button id="btn-hit-right" class="btn-mini-test" title="Push / Slice right (4 key)"><kbd>4</kbd> Slice</button>
+        </div>
+      </div>
+
+      <!-- Quick Keybind Legend Strip -->
       <div class="test-shot-hint">
-        Aim: <kbd>&larr;</kbd> <kbd>&rarr;</kbd> / <kbd>A</kbd> <kbd>D</kbd> &bull; Flags: <kbd>1</kbd>-<kbd>0</kbd> or <kbd>Tab</kbd> &bull; Center: <kbd>C</kbd> &bull; Flyover: <kbd>V</kbd> &bull; Real Launch Monitors track your exact custom aim angle!
+        <span class="hint-item"><kbd>Space</kbd> Hit Shot</span>
+        <span class="hint-sep">&bull;</span>
+        <span class="hint-item"><kbd>P</kbd> Pin Hunter</span>
+        <span class="hint-sep">&bull;</span>
+        <span class="hint-item"><kbd>V</kbd> Green Cam</span>
+        <span class="hint-sep">&bull;</span>
+        <span class="hint-item"><kbd>&larr;</kbd><kbd>&rarr;</kbd> Aim</span>
+        <span class="hint-sep">&bull;</span>
+        <span class="hint-item"><kbd>1</kbd>-<kbd>0</kbd> Quick Flag</span>
+        <span class="hint-sep">&bull;</span>
+        <span class="hint-item"><kbd>C</kbd> Center</span>
+        <span class="hint-sep">&bull;</span>
+        <span class="hint-item"><kbd>M</kbd> Mute</span>
       </div>
     </div>
 
@@ -274,4 +308,3 @@
     </div>
   </body>
 </html>
-

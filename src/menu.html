@@ -15,6 +15,15 @@
         <div class="lm-dot" id="lm-dot"></div>
         <span id="lm-status-text">LM BRIDGE ACTIVE: GSPRO (9210) &amp; OGS (3111)</span>
       </div>
+      <div class="quality-badge" id="quality-badge">
+        <span class="q-badge-label">⚡ GRAPHICS:</span>
+        <div class="q-badge-btns">
+          <button class="q-hub-btn" data-q="low" onclick="setHubQuality('low')">LOW</button>
+          <button class="q-hub-btn" data-q="medium" onclick="setHubQuality('medium')">MED</button>
+          <button class="q-hub-btn" data-q="high" onclick="setHubQuality('high')">HIGH</button>
+          <button class="q-hub-btn active" data-q="epic" onclick="setHubQuality('epic')">EPIC</button>
+        </div>
+      </div>
     </div>
     <h1>OpenGolfSim Arcade</h1>
     <p class="subtitle">Select a minigame below or hit a shot from your launch monitor to auto-launch</p>
@@ -79,12 +88,34 @@
   </div>
 
   <script>
+    let currentHubQuality = 'epic';
+    try {
+      currentHubQuality = localStorage.getItem('ogs_graphics_quality') || 'epic';
+    } catch (e) {}
+
+    function setHubQuality(q) {
+      currentHubQuality = q;
+      try {
+        localStorage.setItem('ogs_graphics_quality', q);
+      } catch (e) {}
+      document.querySelectorAll('.q-hub-btn').forEach(btn => {
+        if (btn.getAttribute('data-q') === q) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    setHubQuality(currentHubQuality);
+
     function launchGame(name) {
+      const q = currentHubQuality;
       if (window.arcadeAPI && typeof window.arcadeAPI.launchGame === 'function') {
-        window.arcadeAPI.launchGame(name);
+        window.arcadeAPI.launchGame(name, { quality: q });
       } else {
         // Fallback for direct browser preview
-        window.location.href = '../games/' + name + '/index.html';
+        window.location.href = '../games/' + name + '/index.html?quality=' + q;
       }
     }
 
