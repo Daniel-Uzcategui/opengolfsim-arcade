@@ -17,6 +17,7 @@ for GAME in "${GAMES[@]}"; do
     
     if [ -d "$SRC_DIR" ]; then
         echo "Installing $GAME..."
+        rm -rf "$DEST_DIR"
         mkdir -p "$DEST_DIR"
         cp -r "$SRC_DIR/"* "$DEST_DIR/"
         
