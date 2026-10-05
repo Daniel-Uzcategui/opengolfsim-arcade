@@ -299,14 +299,13 @@ function handleGSProPayload(socket, data) {
     const vla = Number(b.VLA) || 15;
     
     // =========================================================================
-    // INVERT HLA and SpinAxis to match FUSE physics convention:
-    // In GSPro/Garmin: HLA < 0 is Left (pull), HLA > 0 is Right (push).
-    // In FUSE ballPhysics: -hla rotates to -X (Left) when hla > 0.
-    // Therefore: -Number(b.HLA) maps standard golf launch angle to FUSE!
+    // Standard golf launch angle conventions:
+    // HLA < 0 is Left (pull), HLA > 0 is Right (push).
+    // SpinAxis < 0 is Draw/Hook (curves Left), SpinAxis > 0 is Fade/Slice (curves Right).
     // =========================================================================
-    const hla = -(Number(b.HLA) || 0);
+    const hla = Number(b.HLA) || 0;
     const totalSpin = Number(b.TotalSpin) || 3500;
-    const spinAxis = -(Number(b.SpinAxis) || 0);
+    const spinAxis = Number(b.SpinAxis) || 0;
     const backSpin = Number(b.Backspin) || Math.round(totalSpin * Math.cos((spinAxis * Math.PI) / 180));
     const sideSpin = Number(b.SideSpin) || Math.round(totalSpin * Math.sin((spinAxis * Math.PI) / 180));
 
