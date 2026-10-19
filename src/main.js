@@ -5,15 +5,25 @@ const net = require('net');
 const os = require('os');
 
 // ============================================================================
-// GPU & WebGPU Acceleration Flags
+// GPU & WebGPU Acceleration Flags (Platform-Aware for macOS Metal / Win / Linux)
 // ============================================================================
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 app.commandLine.appendSwitch('enable-gpu-rasterization');
-app.commandLine.appendSwitch('enable-zero-copy');
-app.commandLine.appendSwitch('force_high_performance_gpu');
+app.commandLine.appendSwitch('enable-unsafe-webgpu');
 app.commandLine.appendSwitch('enable-experimental-web-platform-features');
-app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');
 app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096');
+
+if (process.platform === 'win32') {
+  app.commandLine.appendSwitch('enable-zero-copy');
+  app.commandLine.appendSwitch('force_high_performance_gpu');
+  app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');
+} else if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('enable-zero-copy');
+  app.commandLine.appendSwitch('force_high_performance_gpu');
+  app.commandLine.appendSwitch('enable-features', 'Vulkan,UseSkiaRenderer');
+}
+// On macOS (darwin), Chromium uses Apple Metal natively for WebGPU; avoid
+// enable-zero-copy / CalculateNativeWinOcclusion which can cause black swapchains.
 
 // ============================================================================
 // Path Resolution (Standalone Portable Mode + Regular OpenGolfSim Mode)
@@ -83,11 +93,38 @@ function loadGame(gameName, options) {
   }
 }
 
+// Acoustic blanking and waggle filter state
+let lastShotDispatchTime = 0;
+const ACOUSTIC_BLANKING_MS = 1500; // 1.5s acoustic blanking window to prevent mic/canvas phantom impacts
+const MIN_BALL_SPEED_MPH = 35.0;   // Swings < 35 mph are practice waggles
+
 function dispatchShotToWindow(shot) {
   if (!mainWindow || !mainWindow.webContents) {
     console.warn('[LaunchMonitor] Cannot dispatch shot: mainWindow not ready');
     return;
   }
+
+  const now = Date.now();
+  // 1. Acoustic Blanking Window: Lock out phantom secondary triggers from impact vibration
+  if (now - lastShotDispatchTime < ACOUSTIC_BLANKING_MS) {
+    console.log(`[LaunchMonitor] Shot suppressed by acoustic blanking (${now - lastShotDispatchTime}ms < ${ACOUSTIC_BLANKING_MS}ms)`);
+    return;
+  }
+
+  // 2. Waggle Filter: Ignore slow practice waggles below threshold
+  const speed = Number(shot.ballSpeed) || 0;
+  if (speed < MIN_BALL_SPEED_MPH) {
+    console.log(`[LaunchMonitor] Waggle detected (${speed.toFixed(1)} mph < ${MIN_BALL_SPEED_MPH} mph) - Turn not advanced`);
+    const waggleScript = `
+      try {
+        window.postMessage({ type: 'waggle', speed: ${speed} }, '*');
+      } catch (e) {}
+    `;
+    mainWindow.webContents.executeJavaScript(waggleScript).catch(() => {});
+    return;
+  }
+
+  lastShotDispatchTime = now;
 
   // If player is currently at the menu, automatically start BeerPong!
   if (!currentGame) {
@@ -348,10 +385,18 @@ function createWindow(targetGame = null) {
     title: targetGame ? `OpenGolfSim - ${targetGame}` : 'OpenGolfSim Arcade'
   });
 
-  mainWindow.maximize();
-  mainWindow.once('ready-to-show', () => {
+  let windowShown = false;
+  const showAndMaximize = () => {
+    if (windowShown || !mainWindow || mainWindow.isDestroyed()) return;
+    windowShown = true;
     mainWindow.show();
-  });
+    mainWindow.maximize();
+    mainWindow.focus();
+  };
+
+  mainWindow.once('ready-to-show', showAndMaximize);
+  // Safety fallback on macOS/Linux in case ready-to-show is delayed by WebGPU init
+  setTimeout(showAndMaximize, 900);
 
   // Global key bindings inside window
   mainWindow.webContents.on('before-input-event', (event, input) => {
@@ -365,14 +410,17 @@ function createWindow(targetGame = null) {
   });
 
   // IPC handlers
+  ipcMain.removeAllListeners('launch-game');
   ipcMain.on('launch-game', (_event, gameName, options) => {
     loadGame(gameName, options);
   });
 
+  ipcMain.removeAllListeners('return-menu');
   ipcMain.on('return-menu', () => {
     loadMenu();
   });
 
+  ipcMain.removeHandler('get-connection-status');
   ipcMain.handle('get-connection-status', () => {
     return {
       connected: activeLMConnections > 0,
@@ -401,6 +449,12 @@ app.whenReady().then(() => {
   } else {
     createWindow();
   }
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
 });
 
 app.on('window-all-closed', () => {

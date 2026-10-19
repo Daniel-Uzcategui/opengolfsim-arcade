@@ -16,6 +16,8 @@ if (!fs.existsSync(outputDir)) {
 
 const targets = [
   { name: 'arcade_hub.png', url: path.join(__dirname, 'src/menu.html'), wait: 2000 },
+  { name: 'cosmic_bowling.png', url: path.join(__dirname, 'games/CosmicBowling/index.html'), wait: 5000 },
+  { name: 'titan_breaker.png', url: path.join(__dirname, 'games/TitanBreaker/index.html'), wait: 5000 },
   { name: 'beer_pong.png', url: path.join(__dirname, 'games/BeerPong/index.html'), wait: 5000 },
   { name: 'capture_the_flag.png', url: path.join(__dirname, 'games/CaptureTheFlag/index.html'), wait: 5000 },
   { name: 'cornhole.png', url: path.join(__dirname, 'games/Cornhole/index.html'), wait: 5000 }

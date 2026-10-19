@@ -17,6 +17,14 @@ if (-not (Test-Path $ogsFuseDir)) {
     New-Item -ItemType Directory -Path $ogsFuseDir -Force | Out-Null
 }
 
+# Clean up disabled prototypes if previously installed
+foreach ($disabled in @("CosmicBowling", "TitanBreaker")) {
+    $disabledDir = Join-Path $ogsFuseDir $disabled
+    if (Test-Path $disabledDir) {
+        Remove-Item -Path $disabledDir -Recurse -Force
+    }
+}
+
 $games = @("BeerPong", "CaptureTheFlag", "Cornhole")
 
 foreach ($game in $games) {
@@ -27,6 +35,8 @@ foreach ($game in $games) {
         Write-Host "Installing $game..." -ForegroundColor White
         if (-not (Test-Path $destGameDir)) {
             New-Item -ItemType Directory -Path $destGameDir -Force | Out-Null
+        } elseif (Test-Path (Join-Path $destGameDir "assets")) {
+            Remove-Item -Path (Join-Path $destGameDir "assets\*") -Recurse -Force
         }
 
         # Copy all game files (index.html, game.json, assets, media)

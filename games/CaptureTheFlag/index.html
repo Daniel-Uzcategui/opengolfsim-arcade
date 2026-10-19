@@ -1,19 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Capture The Flag - OpenGolfSim</title>
+    <title>Capture The Flag • 2026 AAA Tour Edition - OpenGolfSim</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <script type="module" crossorigin src="./assets/ctf-z0Fjn8Zf.js"></script>
+    <script type="module" crossorigin src="./assets/ctf-PfyoKYG2.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/base-CPp2Xu_E.js">
-    <link rel="modulepreload" crossorigin href="./assets/index-BTHvJPAi.js">
-    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-lHHRyJ06.js">
+    <link rel="modulepreload" crossorigin href="./assets/index-HlLQx5WU.js">
+    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-BaOLbVEc.js">
     <link rel="modulepreload" crossorigin href="./assets/rangeMtns-DiBmqyLl.js">
-    <link rel="modulepreload" crossorigin href="./assets/UIStats-ASJdNwdn.js">
-    <link rel="modulepreload" crossorigin href="./assets/golfBall-CsJ1AUDr.js">
-    <link rel="modulepreload" crossorigin href="./assets/player-DVEcW8XN.js">
+    <link rel="modulepreload" crossorigin href="./assets/UILoadingScreen-DKY4cSQ9.js">
+    <link rel="modulepreload" crossorigin href="./assets/UIStats-pa9NY6kx.js">
+    <link rel="modulepreload" crossorigin href="./assets/golfBall-B727TJFs.js">
+    <link rel="modulepreload" crossorigin href="./assets/player-0lTtSW8e.js">
     <link rel="stylesheet" crossorigin href="./assets/base-Xcqjeygc.css">
-    <link rel="stylesheet" crossorigin href="./assets/index-W4JQEYLH.css">
+    <link rel="stylesheet" crossorigin href="./assets/UILoadingScreen-W4JQEYLH.css">
     <link rel="stylesheet" crossorigin href="./assets/ctf-DecM3M9L.css">
   </head>
   <body style="opacity: 0">
@@ -25,9 +26,9 @@
       <div class="dominance-wrapper">
         <div class="dom-header">
           <span class="dom-label">TERRITORY DOMINANCE</span>
-          <div class="wind-hud" id="wind-hud" title="Live Course Wind Condition">
-            <span class="wind-arrow" id="wind-arrow">&#10148;</span>
-            <span class="wind-label" id="wind-text">5 MPH NE</span>
+          <div class="wind-hud" id="wind-hud" title="1:1 Unmodified Launch Monitor Ballistics (Zero Artificial Wind Drift)">
+            <span class="wind-arrow" id="wind-arrow">&#9679;</span>
+            <span class="wind-label" id="wind-text">1:1 TRUE BALLISTICS</span>
           </div>
           <span class="dom-stats" id="dom-stats-text">10 FLAGS OPEN</span>
         </div>
@@ -58,16 +59,16 @@
               <span class="unit" id="target-dist-unit">YDS</span>
             </div>
             <div class="target-meta">
-              <div class="club-rec" id="club-rec">Club: Lob Wedge</div>
+              <div class="club-rec" id="club-rec">Club: Lob Wedge (LW)</div>
               <div class="flag-best-holder" id="flag-best-holder">Record: Open for capture!</div>
             </div>
           </div>
           <div class="aim-angle-row">
             <span class="aim-text" id="aim-angle-display">Target Aim: Dead Center (0.0°)</span>
             <div class="aim-btn-group">
-              <button id="btn-nudge-left-2" class="btn-aim-nudge" title="Nudge 2° Left">-2°</button>
+              <button id="btn-nudge-left-2" class="btn-aim-nudge" title="Aim 2° Left of Pin (A / Left Arrow)">&larr; 2° L</button>
               <button id="btn-recenter-aim" class="btn-recenter" title="Re-center aim directly at the flag pin (C key)">Center</button>
-              <button id="btn-nudge-right-2" class="btn-aim-nudge" title="Nudge 2° Right">+2°</button>
+              <button id="btn-nudge-right-2" class="btn-aim-nudge" title="Aim 2° Right of Pin (D / Right Arrow)">2° R &rarr;</button>
             </div>
           </div>
         </div>
@@ -128,27 +129,31 @@
       <div class="radar-header">
         <div class="radar-title-box">
           <span class="radar-dot"></span>
-          <span class="radar-title">RANGE RADAR</span>
+          <span class="radar-title">TACTICAL RANGE RADAR</span>
         </div>
         <span class="radar-sub" id="radar-target-tag">Target: Flag 1 (65y)</span>
       </div>
       <canvas id="radar-canvas" width="220" height="300"></canvas>
       <div class="radar-footer">
-        <span>Click flag to aim</span>
+        <span>Click flag to lock target</span>
         <button id="btn-mute" class="radar-mute-btn" title="Mute/Unmute Audio (M key)">🔊</button>
       </div>
     </div>
 
-    <!-- Live Flight Telemetry Card (Appears after shot) -->
+    <!-- Live Flight Telemetry Card (Broadcast Launch Monitor Readout) -->
     <div id="telemetry-card" class="telemetry-card">
       <div class="telem-row">
         <div class="telem-item">
           <span class="telem-val" id="telem-speed">--</span>
-          <span class="telem-lbl">SPEED (MPH)</span>
+          <span class="telem-lbl">BALL MPH</span>
         </div>
         <div class="telem-item">
           <span class="telem-val" id="telem-vla">--</span>
-          <span class="telem-lbl">LAUNCH VLA</span>
+          <span class="telem-lbl">VLA</span>
+        </div>
+        <div class="telem-item">
+          <span class="telem-val" id="telem-hla">0.0°</span>
+          <span class="telem-lbl">HLA (L/R)</span>
         </div>
         <div class="telem-item">
           <span class="telem-val" id="telem-spin">--</span>
@@ -156,7 +161,7 @@
         </div>
         <div class="telem-item">
           <span class="telem-val" id="telem-apex">--</span>
-          <span class="telem-lbl">APEX (YD)</span>
+          <span class="telem-lbl">APEX</span>
         </div>
         <div class="telem-item">
           <span class="telem-val" id="telem-carry">--</span>
@@ -274,10 +279,10 @@
         <!-- Compact Shot Variance Testing Pills -->
         <div class="hud-test-cluster">
           <span class="test-cluster-lbl">Simulate:</span>
-          <button id="btn-hit-short" class="btn-mini-test" title="Mishit short of target green (1 key)"><kbd>1</kbd> Short</button>
-          <button id="btn-hit-long" class="btn-mini-test" title="Missed long past target green (2 key)"><kbd>2</kbd> Long</button>
-          <button id="btn-hit-left" class="btn-mini-test" title="Pull / Hook left (3 key)"><kbd>3</kbd> Hook</button>
-          <button id="btn-hit-right" class="btn-mini-test" title="Push / Slice right (4 key)"><kbd>4</kbd> Slice</button>
+          <button id="btn-hit-short" class="btn-mini-test" title="Mishit short of target green (Shift+1)"><kbd>1</kbd> Short</button>
+          <button id="btn-hit-long" class="btn-mini-test" title="Missed long past target green (Shift+2)"><kbd>2</kbd> Long</button>
+          <button id="btn-hit-left" class="btn-mini-test" title="Pull / Hook left (Shift+3)"><kbd>3</kbd> Hook L</button>
+          <button id="btn-hit-right" class="btn-mini-test" title="Push / Slice right (Shift+4)"><kbd>4</kbd> Slice R</button>
         </div>
       </div>
 
@@ -308,3 +313,4 @@
     </div>
   </body>
 </html>
+

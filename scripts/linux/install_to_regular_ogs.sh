@@ -2,12 +2,20 @@
 set -e
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-OGS_FUSE_DIR="$HOME/.config/opengolfsim-desktop/fuse"
-
-echo "=== Deploying Arcade Games to Regular OpenGolfSim Launcher (Linux) ==="
+OS_NAME="$(uname -s)"
+if [ "$OS_NAME" = "Darwin" ]; then
+    OGS_FUSE_DIR="$HOME/Library/Application Support/opengolfsim-desktop/fuse"
+    echo "=== Deploying Arcade Games to Regular OpenGolfSim Launcher (macOS) ==="
+else
+    OGS_FUSE_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/opengolfsim-desktop/fuse"
+    echo "=== Deploying Arcade Games to Regular OpenGolfSim Launcher (Linux) ==="
+fi
 echo "Target Directory: $OGS_FUSE_DIR"
 
 mkdir -p "$OGS_FUSE_DIR"
+
+# Remove disabled prototypes if previously installed
+rm -rf "$OGS_FUSE_DIR/CosmicBowling" "$OGS_FUSE_DIR/TitanBreaker"
 
 GAMES=("BeerPong" "CaptureTheFlag" "Cornhole")
 

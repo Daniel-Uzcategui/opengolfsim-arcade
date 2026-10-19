@@ -9,6 +9,7 @@
     "ctf": "electron . CaptureTheFlag",
     "cornhole": "electron . Cornhole",
     "install:ogs:win": "powershell -ExecutionPolicy Bypass -File scripts/windows/install_to_regular_ogs.ps1",
+    "install:ogs:mac": "bash scripts/linux/install_to_regular_ogs.sh",
     "install:ogs:linux": "bash scripts/linux/install_to_regular_ogs.sh"
   },
   "keywords": [

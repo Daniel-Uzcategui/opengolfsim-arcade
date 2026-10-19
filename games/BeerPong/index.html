@@ -1,17 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <title>Beer Pong Golf - OpenGolfSim</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <script type="module" crossorigin src="./assets/beerpong-Uo3s_z96.js"></script>
+    <script type="module" crossorigin src="./assets/beerpong-B2XOUtoY.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/base-CPp2Xu_E.js">
-    <link rel="modulepreload" crossorigin href="./assets/index-BTHvJPAi.js">
-    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-lHHRyJ06.js">
-    <link rel="modulepreload" crossorigin href="./assets/golfBall-CsJ1AUDr.js">
+    <link rel="modulepreload" crossorigin href="./assets/index-HlLQx5WU.js">
+    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-BaOLbVEc.js">
+    <link rel="modulepreload" crossorigin href="./assets/golfBall-B727TJFs.js">
+    <link rel="modulepreload" crossorigin href="./assets/UILoadingScreen-DKY4cSQ9.js">
     <link rel="stylesheet" crossorigin href="./assets/base-Xcqjeygc.css">
-    <link rel="stylesheet" crossorigin href="./assets/index-W4JQEYLH.css">
-    <link rel="stylesheet" crossorigin href="./assets/beerpong-C9yoOUdZ.css">
+    <link rel="stylesheet" crossorigin href="./assets/UILoadingScreen-W4JQEYLH.css">
+    <link rel="stylesheet" crossorigin href="./assets/beerpong--qknotB1.css">
   </head>
   <body style="opacity: 0">
     <canvas id="canvas"></canvas>
@@ -29,6 +30,7 @@
         </div>
         <div class="badge-row">
           <span class="mode-badge" id="mode-badge">SOLO PRACTICE</span>
+          <span class="ballistics-badge">1:1 R10 BALLISTICS</span>
           <span class="streak-badge" id="streak-badge" style="display: none;">&#x1F525; STREAK: 2</span>
         </div>
       </div>
@@ -52,13 +54,14 @@
           <div class="target-aim-info" id="target-aim-info">Target: Cup #1 (Head Pin)</div>
         </div>
         <div class="camera-actions">
+          <div class="aim-nudge-row">
+            <button id="btn-aim-left" class="btn-action btn-nudge" title="Aim Left (Left Arrow)">&larr; Aim L</button>
+            <button id="btn-center-aim" class="btn-action" title="Re-center aim on selected cup">Center</button>
+            <button id="btn-aim-right" class="btn-action btn-nudge" title="Aim Right (Right Arrow)">Aim R &rarr;</button>
+          </div>
           <button id="btn-table-cam" class="btn-action" title="View Table and Cups (C key)">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h10a2 2 0 0 1 2 2v3.34l4-2.4a1 1 0 0 1 1.5.86v7.4a1 1 0 0 1-1.5.86l-4-2.4V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
-            <span>Table Cam</span>
-          </button>
-          <button id="btn-center-aim" class="btn-action" title="Re-center aim line at pyramid center (Center key)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-            <span>Center Aim</span>
+            <span>Table Cam (C)</span>
           </button>
         </div>
       </div>
@@ -234,6 +237,38 @@
       </div>
     </div>
 
+    <!-- Live Launch Monitor Telemetry Dock -->
+    <section id="telemetry-dock">
+      <div class="tm-cell">
+        <span class="tm-lbl">BALL SPEED</span>
+        <span class="tm-val" id="tm-speed">--<small>mph</small></span>
+      </div>
+      <div class="tm-cell">
+        <span class="tm-lbl">LAUNCH VLA</span>
+        <span class="tm-val" id="tm-vla">--<small>&deg;</small></span>
+      </div>
+      <div class="tm-cell">
+        <span class="tm-lbl">HLA LINE</span>
+        <span class="tm-val" id="tm-hla">--<small>&deg;</small></span>
+      </div>
+      <div class="tm-cell">
+        <span class="tm-lbl">BACKSPIN</span>
+        <span class="tm-val" id="tm-spin">--<small>rpm</small></span>
+      </div>
+      <div class="tm-cell">
+        <span class="tm-lbl">PEAK APEX</span>
+        <span class="tm-val" id="tm-apex">--<small>ft</small></span>
+      </div>
+      <div class="tm-cell highlight">
+        <span class="tm-lbl">CARRY</span>
+        <span class="tm-val" id="tm-carry">--<small>yds</small></span>
+      </div>
+      <div class="tm-cell">
+        <span class="tm-lbl">OFFLINE</span>
+        <span class="tm-val" id="tm-offline">--<small>yds</small></span>
+      </div>
+    </section>
+
     <!-- Bottom Controls & Keybindings Helper -->
     <footer id="bottom-bar">
       <div class="key-hints">
@@ -264,3 +299,4 @@
     </footer>
   </body>
 </html>
+
