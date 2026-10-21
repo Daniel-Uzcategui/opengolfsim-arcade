@@ -20,8 +20,8 @@ It features direct hardware integration with radar and camera launch monitors (i
 
 | Game | Preview | Key Features |
 | :--- | :---: | :--- |
-| **🍺 Beer Pong Golf**<br>Tournament beer pong into 10 solo cups. | <img src="screenshots/beer_pong.png" width="360" alt="Beer Pong Golf" /> | • 15Y to 200Y Target Distances<br>• Swish & Rim-Bounce Physics<br>• Interactive 3D Click-to-Target<br>• Mountain Vista Style Aim Tilt |
-| **🚩 Capture The Flag**<br>10-round showdown across all clubs. | <img src="screenshots/capture_the_flag.png" width="360" alt="Capture The Flag" /> | • 65Y to 280Y Flag Distances<br>• Territory Control Rings<br>• Real-time Leaderboards<br>• Dynamic Wind & Lie Variations |
+| **🍺 Beer Pong Golf**<br>Tournament beer pong into 10 solo cups.<br>🎬 [Watch 1080p Promo Video](screenshots/beer_pong_promo.mp4) | <img src="screenshots/beer_pong.png" width="360" alt="Beer Pong Golf" /><br><img src="screenshots/beer_pong_swish.png" width="360" alt="Beer Pong Sink" /> | • 15Y to 200Y Target Distances<br>• Swish, Rim-Bounce & Runway Roll-In Physics<br>• Broadcast Esports HUD & Circular Rack Radar<br>• Golden Hour Stadium Lighting & Laser Pillars |
+| **🚩 Capture The Flag**<br>10-round territory control across all clubs.<br>🎬 [Watch 1080p Promo Video](screenshots/capture_the_flag_promo.mp4) | <img src="screenshots/capture_the_flag.png" width="360" alt="Capture The Flag" /><br><img src="screenshots/capture_the_flag_shot.png" width="360" alt="Capture The Flag Claimed" /> | • 55Y to 235Y Flag Distances (SW to Driver)<br>• Territory Control Rings & Sky Laser Beacons<br>• Broadcast Scorebug, Circular Radar & Targets HUD<br>• Golden Hour Mountain Course & Sculpted Bunkers |
 | **🎯 Cornhole Golf**<br>Beachside pitching & chipping challenge. | <img src="screenshots/cornhole.png" width="360" alt="Cornhole Golf" /> | • Authentic Board Slider Physics<br>• Hole-in-One 3-Point Scoring<br>• 2-Team Competitive Match<br>• Distance Tuning |
 
 ---
