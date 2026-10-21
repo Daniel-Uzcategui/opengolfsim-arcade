@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Capture The Flag • 2026 AAA Tour Edition - OpenGolfSim</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <script type="module" crossorigin src="./assets/ctf-DwCnzSB2.js"></script>
+    <script type="module" crossorigin src="./assets/ctf-DCrT1TyN.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/base-CPp2Xu_E.js">
     <link rel="modulepreload" crossorigin href="./assets/index-CEgrPuYg.js">
     <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-DFmT_UTY.js">
@@ -15,7 +15,7 @@
     <link rel="modulepreload" crossorigin href="./assets/player-DLYiksAA.js">
     <link rel="stylesheet" crossorigin href="./assets/base-Xcqjeygc.css">
     <link rel="stylesheet" crossorigin href="./assets/UILoadingScreen-W4JQEYLH.css">
-    <link rel="stylesheet" crossorigin href="./assets/ctf-BzMvRsJs.css">
+    <link rel="stylesheet" crossorigin href="./assets/ctf-Cxvc5R1T.css">
   </head>
   <body style="opacity: 0">
     <canvas id="canvas"></canvas>
@@ -93,36 +93,34 @@
       <div class="radar-target-pill" id="radar-target-tag">FLAG 1 &bull; 55 YDS</div>
     </aside>
 
-    <!-- 3. MIDDLE-LEFT "ACTIVE TARGETS" PANEL -->
+    <!-- 3. MIDDLE-LEFT COMPACT "ACTIVE TARGETS" TABLE -->
     <aside id="active-targets-panel" class="hud-glass">
       <div class="at-header">
         <div class="at-title-wrap">
           <span class="at-accent-dot"></span>
-          <span class="at-title">ACTIVE TARGETS</span>
+          <span class="at-title">TARGETS</span>
         </div>
-        <button id="btn-drone-cam" class="at-cam-btn" title="Aerial Green Flyover (V key)">&#127909; Green Cam</button>
+        <button id="btn-drone-cam" class="at-cam-btn" title="Aerial Green Flyover (V key)">&#127909; Cam</button>
       </div>
 
-      <div class="at-subbar">
-        <span id="terrain-tag">Amphitheater Bowl (&minus;2 ft)</span>
-        <span id="flag-owner-pill" class="flag-owner-pill neutral">OPEN</span>
+      <div class="at-table-head">
+        <span class="at-col-flag">&#9873;</span>
+        <span class="at-col-num">#</span>
+        <span class="at-col-dist">DIST</span>
+        <span class="at-col-rec">BEST</span>
       </div>
 
-      <!-- 10 Flag Target Rows -->
+      <!-- 10 Compact Table Rows -->
       <div id="flag-selector-strip" class="at-list">
         <!-- Populated dynamically by JS -->
       </div>
 
-      <div class="at-footer">
-        <div class="at-record-line" id="flag-best-holder">Record: Open for capture!</div>
-        <div class="at-aim-controls">
-          <span class="at-aim-label" id="aim-angle-display">Aim: Center (0.0&deg;)</span>
-          <div class="at-aim-btns">
-            <button id="btn-nudge-left-2" class="btn-aim-nudge" title="Aim 2&deg; Left (A key)">&larr; 2&deg;</button>
-            <button id="btn-recenter-aim" class="btn-recenter" title="Center Aim on Pin (C key)">Center</button>
-            <button id="btn-nudge-right-2" class="btn-aim-nudge" title="Aim 2&deg; Right (D key)">2&deg; &rarr;</button>
-          </div>
-        </div>
+      <!-- Hidden compatibility elements -->
+      <div class="sr-only-compat">
+        <span id="terrain-tag"></span>
+        <span id="flag-owner-pill"></span>
+        <span id="flag-best-holder"></span>
+        <span id="aim-angle-display"></span>
       </div>
     </aside>
 
