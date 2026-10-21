@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Capture The Flag • 2026 AAA Tour Edition - OpenGolfSim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="stylesheet" href="./ctf.css">
+    <script type="module" src="./ctf.ts"></script>
+  </head>
+  <body style="opacity: 0">
+    <canvas id="canvas"></canvas>
+
+    <!-- 1. TOP-CENTER ESPORTS SCOREBUG -->
+    <header id="top-scorebug" class="hud-glass">
+      <!-- Left Wing: Blue Team & Red Team -->
+      <div class="scorebug-wing left-wing" id="scorebug-left-wing"></div>
+
+      <!-- Center Block: Target Distance & Round Counter -->
+      <div class="scorebug-center">
+        <button id="btn-prev-flag" class="sb-nav-btn" title="Previous Target Flag ([ key)">&#9664;</button>
+        <div class="sb-center-main">
+          <div class="sb-dist-row">
+            <span class="sb-dist-val" id="target-dist-val">55</span>
+            <span class="sb-dist-unit" id="target-dist-unit">YDS</span>
+          </div>
+          <div class="sb-round-row">
+            <span id="round-title">ROUND 1/10</span>
+            <span class="sb-dot">&bull;</span>
+            <span id="flag-badge">FLAG 1</span>
+          </div>
+        </div>
+        <button id="btn-next-flag" class="sb-nav-btn" title="Next Target Flag (] / Tab)">&#9654;</button>
+        <button id="btn-toggle-setup" class="sb-gear-btn" title="Match &amp; Graphics Settings">&#9881;</button>
+      </div>
+
+      <!-- Right Wing: Green Team & Yellow Team -->
+      <div class="scorebug-wing right-wing" id="scorebug-right-wing"></div>
+
+      <!-- Hidden compatibility container & dominance bar -->
+      <div id="team-cards-container" class="sr-only-compat"></div>
+      <div class="dominance-mini-track" id="dominance-bar" title="Territory Control">
+        <div class="dom-segment blue" id="dom-blue" style="width: 0%"></div>
+        <div class="dom-segment red" id="dom-red" style="width: 0%"></div>
+        <div class="dom-segment green" id="dom-green" style="width: 0%"></div>
+        <div class="dom-segment yellow" id="dom-yellow" style="width: 0%"></div>
+        <div class="dom-segment neutral" id="dom-neutral" style="width: 100%"></div>
+      </div>
+
+      <!-- Collapsible Settings Drawer -->
+      <div id="setup-drawer" class="setup-drawer hud-glass">
+        <div class="setup-row">
+          <span class="setup-lbl">ACTIVE TEAMS:</span>
+          <div class="setup-btn-group">
+            <button class="team-btn active" data-teams="2" id="btn-teams-2">2 TEAMS</button>
+            <button class="team-btn" data-teams="3" id="btn-teams-3">3 TEAMS</button>
+            <button class="team-btn" data-teams="4" id="btn-teams-4">4 TEAMS</button>
+          </div>
+        </div>
+        <div class="setup-row">
+          <span class="setup-lbl">GRAPHICS:</span>
+          <div class="setup-btn-group">
+            <button class="q-btn" data-quality="low" id="q-low">LOW</button>
+            <button class="q-btn" data-quality="medium" id="q-med">MED</button>
+            <button class="q-btn" data-quality="high" id="q-high">HIGH</button>
+            <button class="q-btn active" data-quality="epic" id="q-epic">EPIC</button>
+          </div>
+        </div>
+        <div class="setup-row">
+          <span class="setup-lbl">AUDIO &amp; HINTS:</span>
+          <div class="setup-btn-group">
+            <button id="btn-mute" class="setup-util-btn" title="Mute/Unmute Audio (M key)">&#128266; Audio On</button>
+            <span class="setup-hint">Click any team name in scorebug to rename</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. TOP-RIGHT CIRCULAR COURSE RADAR -->
+    <aside id="circular-radar" class="circular-radar-wrap" title="Click any flag pin to lock target">
+      <div class="radar-bezel">
+        <canvas id="radar-canvas" width="220" height="220"></canvas>
+      </div>
+      <div class="radar-target-pill" id="radar-target-tag">FLAG 1 &bull; 55 YDS</div>
+    </aside>
+
+    <!-- 3. MIDDLE-LEFT COMPACT "ACTIVE TARGETS" TABLE -->
+    <aside id="active-targets-panel" class="hud-glass">
+      <div class="at-header">
+        <div class="at-title-wrap">
+          <span class="at-accent-dot"></span>
+          <span class="at-title">TARGETS</span>
+        </div>
+        <button id="btn-drone-cam" class="at-cam-btn" title="Aerial Green Flyover (V key)">&#127909; Cam</button>
+      </div>
+
+      <div class="at-table-head">
+        <span class="at-col-flag">&#9873;</span>
+        <span class="at-col-num">#</span>
+        <span class="at-col-dist">DIST</span>
+        <span class="at-col-rec">BEST</span>
+      </div>
+
+      <!-- 10 Compact Table Rows -->
+      <div id="flag-selector-strip" class="at-list">
+        <!-- Populated dynamically by JS -->
+      </div>
+
+      <!-- Hidden compatibility elements -->
+      <div class="sr-only-compat">
+        <span id="terrain-tag"></span>
+        <span id="flag-owner-pill"></span>
+        <span id="flag-best-holder"></span>
+        <span id="aim-angle-display"></span>
+      </div>
+    </aside>
+
+    <!-- 4. BOTTOM-LEFT COMPACT "SHOT DATA" CARD -->
+    <section id="shot-data-card" class="hud-glass">
+      <div class="sd-header">
+        <span class="sd-title">Shot Data</span>
+        <div class="sd-header-actions">
+          <span class="sd-dom-summary" id="dom-stats-text">10 FLAGS OPEN</span>
+          <button id="btn-mulligan" class="sd-mulligan-btn" title="Mulligan / Rehit last shot (Z key)">&#8634; Mulligan</button>
+        </div>
+      </div>
+      <div class="sd-metrics-grid">
+        <div class="sd-metric">
+          <span class="sd-lbl">BALL SPEED</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="telem-speed">--</span>
+            <span class="sd-unit">MPH</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">CARRY</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="telem-carry">--</span>
+            <span class="sd-unit">YDS</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">LAUNCH</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="telem-vla">--</span>
+            <span class="sd-unit">DEG</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">SPIN</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="telem-spin">--</span>
+            <span class="sd-unit">RPM</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">OFFLINE</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="telem-deviation">0.0</span>
+            <span class="sd-unit">YDS</span>
+          </div>
+        </div>
+      </div>
+      <!-- Hidden secondary telemetry spans for backwards compatibility -->
+      <div class="sr-only-compat">
+        <span id="telem-hla">0.0&deg;</span>
+        <span id="telem-apex">--</span>
+        <span id="telem-dist">--</span>
+      </div>
+    </section>
+
+    <!-- 5. BOTTOM-CENTER ACTIVE PLAYER / STREAK BANNER -->
+    <section id="active-player-banner" class="hud-glass red">
+      <div id="turn-banner" class="ap-main-row red">
+        <div class="ap-team-badge">
+          <span class="ap-shield-icon" id="ap-shield-icon">&#128737;</span>
+          <span id="turn-player-name">RED TEAM</span>
+        </div>
+        <div class="ap-shot-box">
+          <span class="ap-shot-text" id="ap-shot-counter">SHOT 1/3</span>
+          <div class="shot-pips" id="shot-pips">
+            <div class="shot-pip active" id="pip-0"></div>
+            <div class="shot-pip" id="pip-1"></div>
+            <div class="shot-pip" id="pip-2"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ap-streak-ribbon" id="streak-ribbon">
+        <span id="streak-ribbon-text">&#128293; ON FIRE x2</span>
+      </div>
+    </section>
+
+    <!-- 6. BOTTOM-RIGHT TACTICAL CALLOUT -->
+    <aside id="tactical-callout" class="hud-glass">
+      <button type="button" class="tac-row defend" id="tac-line-defend" title="Click to aim at defense target">
+        <span class="tac-icon red" id="tac-icon-defend">&#128681;</span>
+        <span class="tac-text" id="tac-text-defend">DEFEND FLAG 1 (RED) - 55 YD</span>
+      </button>
+      <button type="button" class="tac-row capture" id="tac-line-capture" title="Click to aim at capture target">
+        <span class="tac-icon blue" id="tac-icon-capture">&#128681;</span>
+        <span class="tac-text" id="tac-text-capture">CAPTURE FLAG 4 (OPEN) - 115 YD</span>
+      </button>
+    </aside>
+
+    <!-- Bullseye Dart Special Celebration Modal -->
+    <div id="bullseye-modal">
+      <div class="bullseye-card">
+        <span class="bullseye-badge">&#127919; BULLSEYE DART!</span>
+        <h2 class="bullseye-title" id="bullseye-title">INSIDE THE BULLSEYE!</h2>
+        <div class="bullseye-desc" id="bullseye-desc">3.4 FT TO THE PIN</div>
+      </div>
+    </div>
+
+    <!-- Drone Green Flyover Overlay -->
+    <div id="flyover-hud" class="flyover-hud">
+      <div class="flyover-card">
+        <div class="flyover-tag">&#128641; AERIAL GREEN INSPECTION</div>
+        <div class="flyover-sub">Inspecting Target Green Contour &amp; Hazards &bull; Press <kbd>V</kbd> or click to return</div>
+      </div>
+    </div>
+
+    <!-- Celebration Modal for Flag Capture / Steal -->
+    <div id="capture-modal">
+      <span class="modal-badge" id="modal-badge">FLAG CAPTURED!</span>
+      <h2 class="modal-winner red" id="modal-winner">RED CLAIMS FLAG 4!</h2>
+      <div class="modal-details" id="modal-details">Distance: 6.4 ft (Stolen from Blue!)</div>
+    </div>
+
+    <!-- Game Over Screen & Match MVP Recap -->
+    <div id="game-over">
+      <div class="game-over-card">
+        <h1 class="game-over-title red" id="game-over-winner">RED TEAM WINS!</h1>
+        <div class="game-over-subtitle" id="game-over-sub">10-Round Match Complete</div>
+
+        <div class="final-scores" id="final-scores-container">
+          <!-- Rendered dynamically for 2, 3, or 4 teams -->
+        </div>
+
+        <div class="match-mvp-box">
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#127919; Closest Pin Dart:</span>
+            <span class="mvp-val" id="mvp-closest">--</span>
+          </div>
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#9876;&#65039; Most Flag Steals:</span>
+            <span class="mvp-val" id="mvp-steals">--</span>
+          </div>
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#128640; Longest Bomb Capture:</span>
+            <span class="mvp-val" id="mvp-longest">--</span>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="btn-exit">Exit Game</button>
+          <button class="btn btn-primary" id="btn-replay">Play Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Proximity Feedback Banner on Shot Rest -->
+    <div id="shot-banner" class="shot-banner">
+      <span id="shot-banner-badge" class="shot-banner-badge red">RED SHOT 1</span>
+      <span id="shot-banner-dist" class="shot-banner-dist">8.4 FT TO PIN</span>
+    </div>
+
+    <!-- Top Left Menu / Status Container -->
+    <div id="top-left"></div>
+
+    <div id="bottom-status">
+      <div id="render-stats"></div>
+      <div id="lm-status"></div>
+    </div>
+  </body>
+</html>
