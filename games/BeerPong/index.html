@@ -2,300 +2,269 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Beer Pong Golf - OpenGolfSim</title>
+    <title>Beer Pong Golf • 2026 Broadcast Edition - OpenGolfSim</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <script type="module" crossorigin src="./assets/beerpong-CqLg4Lgl.js"></script>
+    <script type="module" crossorigin src="./assets/beerpong-DJd3tqFd.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/base-CPp2Xu_E.js">
-    <link rel="modulepreload" crossorigin href="./assets/index-Cu_5YQXC.js">
-    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-D0yH533I.js">
-    <link rel="modulepreload" crossorigin href="./assets/golfBall-BcKcNj8G.js">
-    <link rel="modulepreload" crossorigin href="./assets/UILoadingScreen-m5zivEbY.js">
+    <link rel="modulepreload" crossorigin href="./assets/index-CEgrPuYg.js">
+    <link rel="modulepreload" crossorigin href="./assets/gen_fairway_map-B9kwDUth.js">
+    <link rel="modulepreload" crossorigin href="./assets/arcade-graphics-CGbX7lO4.js">
+    <link rel="modulepreload" crossorigin href="./assets/golfBall-DIgZOE1c.js">
+    <link rel="modulepreload" crossorigin href="./assets/UILoadingScreen-DtxmtwA6.js">
     <link rel="stylesheet" crossorigin href="./assets/base-Xcqjeygc.css">
     <link rel="stylesheet" crossorigin href="./assets/UILoadingScreen-W4JQEYLH.css">
-    <link rel="stylesheet" crossorigin href="./assets/beerpong--qknotB1.css">
+    <link rel="stylesheet" crossorigin href="./assets/beerpong-D5-ZO5Kv.css">
   </head>
   <body style="opacity: 0">
     <canvas id="canvas"></canvas>
 
-    <!-- Top Navigation & Control Bar -->
-    <header id="top-bar">
-      <!-- Left: Logo & Game Info -->
-      <div class="brand-panel">
-        <div class="brand-title">
-          <span class="brand-icon">&#x1F37A;</span>
-          <div class="brand-text">
-            <span class="main-title">BEER PONG</span>
-            <span class="sub-title">ARCADE GOLF EDITION</span>
+    <!-- 1. TOP-CENTER ESPORTS SCOREBUG -->
+    <header id="top-scorebug" class="hud-glass">
+      <!-- Left Wing: Red Player -->
+      <div class="scorebug-wing left-wing">
+        <div class="sb-team-card red active" id="team-row-red">
+          <div class="sb-team-left">
+            <span class="team-name" id="team-red-player" title="Click to rename">RED SOLO</span>
+            <span class="sb-inline-score">(<span id="team-red-sunk">0</span>)</span>
           </div>
-        </div>
-        <div class="badge-row">
-          <span class="mode-badge" id="mode-badge">SOLO PRACTICE</span>
-          <span class="ballistics-badge">1:1 R10 BALLISTICS</span>
-          <span class="streak-badge" id="streak-badge" style="display: none;">&#x1F525; STREAK: 2</span>
+          <span class="sb-shield" title="Red Solo Cups">&#129380;</span>
+          <span class="sr-only-compat" id="team-red-pts">0 pts</span>
         </div>
       </div>
 
-      <!-- Center: Target & Distance Controller -->
-      <div class="target-panel">
-        <div class="distance-selector">
-          <button class="dist-btn active" data-dist="15" id="dist-15">15 YDS</button>
-          <button class="dist-btn" data-dist="30" id="dist-30">30 YDS</button>
-          <button class="dist-btn" data-dist="60" id="dist-60">60 YDS</button>
-          <button class="dist-btn" data-dist="100" id="dist-100">100 YDS</button>
-          <button class="dist-btn" data-dist="150" id="dist-150">150 YDS</button>
-          <button class="dist-btn" data-dist="200" id="dist-200">200 YDS</button>
-        </div>
-        <div class="target-card">
-          <div class="target-data">
-            <span class="target-dist-num" id="target-dist-display">15</span>
-            <span class="target-unit">YARDS</span>
+      <!-- Center Block: Target Distance & Cups Remaining -->
+      <div class="scorebug-center">
+        <button id="btn-prev-dist" class="sb-nav-btn" title="Previous Distance">&#9664;</button>
+        <div class="sb-center-main">
+          <div class="sb-dist-row">
+            <span class="sb-dist-val" id="target-dist-display">15</span>
+            <span class="sb-dist-unit">YDS</span>
           </div>
-          <div class="target-club" id="target-club-display">Chipping Wedge (56&deg;)</div>
-          <div class="target-aim-info" id="target-aim-info">Target: Cup #1 (Head Pin)</div>
-        </div>
-        <div class="camera-actions">
-          <div class="aim-nudge-row">
-            <button id="btn-aim-left" class="btn-action btn-nudge" title="Aim Left (Left Arrow)">&larr; Aim L</button>
-            <button id="btn-center-aim" class="btn-action" title="Re-center aim on selected cup">Center</button>
-            <button id="btn-aim-right" class="btn-action btn-nudge" title="Aim Right (Right Arrow)">Aim R &rarr;</button>
+          <div class="sb-round-row">
+            <span id="target-aim-info">CUP #1</span>
+            <span class="sb-dot">&bull;</span>
+            <span><span id="cups-left-count">10</span> LEFT</span>
           </div>
-          <button id="btn-table-cam" class="btn-action" title="View Table and Cups (C key)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h10a2 2 0 0 1 2 2v3.34l4-2.4a1 1 0 0 1 1.5.86v7.4a1 1 0 0 1-1.5.86l-4-2.4V18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
-            <span>Table Cam (C)</span>
-          </button>
+        </div>
+        <button id="btn-next-dist" class="sb-nav-btn" title="Next Distance">&#9654;</button>
+        <button id="btn-toggle-setup" class="sb-gear-btn" title="Match &amp; Graphics Settings">&#9881;</button>
+      </div>
+
+      <!-- Right Wing: Blue Player -->
+      <div class="scorebug-wing right-wing">
+        <div class="sb-team-card blue" id="team-row-blue">
+          <span class="sb-shield" title="Blue Solo Cups">&#129380;</span>
+          <div class="sb-team-left">
+            <span class="team-name" id="team-blue-player" title="Click to rename">BLUE SOLO</span>
+            <span class="sb-inline-score">(<span id="team-blue-sunk">0</span>)</span>
+          </div>
+          <span class="sr-only-compat" id="team-blue-pts">0 pts</span>
         </div>
       </div>
 
-      <!-- Right: Active Player & Turn Tracker -->
-      <div class="turn-panel">
-        <div class="turn-card">
-          <div class="player-indicator" id="player-indicator">
-            <span class="team-dot red" id="team-dot"></span>
-            <span class="player-name" id="player-name">Player 1</span>
-          </div>
-          <div class="turn-shots-row">
-            <span class="shot-label">TURN SHOTS:</span>
-            <div class="shot-pips">
-              <span class="shot-pip active" id="pip-1"></span>
-              <span class="shot-pip" id="pip-2"></span>
-              <span class="shot-pip bonus" id="pip-3" style="display: none;">&#9733;</span>
-            </div>
+      <!-- Collapsible Settings Drawer -->
+      <div id="setup-drawer" class="setup-drawer hud-glass">
+        <div class="setup-row">
+          <span class="setup-lbl">MATCH MODE:</span>
+          <div class="setup-btn-group">
+            <button id="btn-toggle-mode" class="team-btn active">Mode: Solo</button>
+            <button id="btn-reset-game" class="team-btn">New Game</button>
           </div>
         </div>
-        <div class="quality-widget">
-          <span class="q-label">GRAPHICS:</span>
-          <div class="q-btns">
+        <div class="setup-row">
+          <span class="setup-lbl">GRAPHICS:</span>
+          <div class="setup-btn-group">
             <button class="q-btn" data-quality="low" id="q-low">LOW</button>
             <button class="q-btn" data-quality="medium" id="q-med">MED</button>
             <button class="q-btn" data-quality="high" id="q-high">HIGH</button>
             <button class="q-btn active" data-quality="epic" id="q-epic">EPIC</button>
           </div>
         </div>
-        <div class="cups-remaining-counter">
-          <span class="count-num" id="cups-left-count">10</span>
-          <span class="count-label">CUPS LEFT</span>
+        <div class="setup-row">
+          <span class="setup-lbl">AUDIO &amp; STATS:</span>
+          <div class="setup-btn-group">
+            <button id="btn-audio-toggle" class="setup-util-btn" title="Toggle Sound (M key)">&#128266; Audio On</button>
+            <span class="setup-hint">Acc: <strong id="stat-accuracy">0%</strong> &bull; Max Streak: <strong id="stat-best-streak">0</strong></span>
+          </div>
         </div>
       </div>
     </header>
 
-    <!-- Left HUD: Interactive Rack Minimap & Re-Rack Controls -->
-    <aside id="left-hud">
-      <div class="hud-card rack-card">
-        <div class="hud-card-header">
-          <span class="card-title">10-CUP PYRAMID RACK</span>
-          <span class="card-hint">Click cup to aim</span>
-        </div>
-
-        <div class="minimap-container">
-          <canvas id="rack-canvas" width="220" height="240"></canvas>
-        </div>
-
-        <div class="rack-controls">
-          <button id="btn-rerack" class="btn-rerack disabled" title="Re-organize remaining cups into a compact triangle (R key)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
-            <span>RE-RACK</span>
-          </button>
-          <div class="rerack-status" id="rerack-status">Standard 10-Cup Rack</div>
-        </div>
-
-        <div class="table-rules-card">
-          <div class="rule-item">
-            <span class="rule-icon">&#x1F3AF;</span>
-            <span class="rule-text"><strong>Direct Swish:</strong> 1 Cup (+Bonus Pts)</span>
-          </div>
-          <div class="rule-item bounce-rule">
-            <span class="rule-icon">&#x26A1;</span>
-            <span class="rule-text"><strong>Roll-In Sink:</strong> 1 Cup (+Base Pts)</span>
-          </div>
-        </div>
+    <!-- 2. TOP-RIGHT CIRCULAR RACK RADAR -->
+    <aside id="circular-radar" class="circular-radar-wrap" title="Click any cup to lock aim">
+      <div class="radar-bezel">
+        <canvas id="rack-canvas" width="220" height="220"></canvas>
+      </div>
+      <div class="radar-pill-row">
+        <div class="radar-target-pill" id="rerack-status">10-CUP RACK &bull; 15 YDS</div>
+        <button id="btn-rerack" class="radar-rerack-btn disabled" title="Re-Rack Cups (R key)">&#8635; Re-Rack</button>
       </div>
     </aside>
 
-    <!-- Right HUD: Match Scorecard & Game Stats -->
-    <aside id="right-hud">
-      <div class="hud-card score-card">
-        <div class="hud-card-header">
-          <span class="card-title">MATCH SCOREBOARD</span>
-          <button id="btn-audio-toggle" class="btn-icon" title="Toggle Sound (M key)">&#128266;</button>
+    <!-- 3. MIDDLE-LEFT COMPACT "TARGETS" TABLE -->
+    <aside id="active-targets-panel" class="hud-glass">
+      <div class="at-header">
+        <div class="at-title-wrap">
+          <span class="at-accent-dot"></span>
+          <span class="at-title">TARGETS</span>
         </div>
+        <button id="btn-table-cam" class="at-cam-btn" title="Table Close-up Cam (C key)">&#127909; Cam</button>
+      </div>
 
-        <!-- 2-Team Versus Display -->
-        <div class="teams-container" id="teams-container">
-          <div class="team-score-row active" id="team-row-red">
-            <div class="team-meta">
-              <span class="team-chip red">RED SOLO</span>
-              <span class="team-player-desc" id="team-red-player">Player 1</span>
-            </div>
-            <div class="team-stats">
-              <span class="team-sunk-score" id="team-red-sunk">0</span>
-              <span class="team-pts-score" id="team-red-pts">0 pts</span>
-            </div>
-          </div>
+      <!-- Compact 6-Distance Selector Strip -->
+      <div class="bp-dist-strip">
+        <button class="dist-btn active" data-dist="15" id="dist-15">15y</button>
+        <button class="dist-btn" data-dist="30" id="dist-30">30y</button>
+        <button class="dist-btn" data-dist="60" id="dist-60">60y</button>
+        <button class="dist-btn" data-dist="100" id="dist-100">100y</button>
+        <button class="dist-btn" data-dist="150" id="dist-150">150y</button>
+        <button class="dist-btn" data-dist="200" id="dist-200">200y</button>
+      </div>
 
-          <div class="team-score-row" id="team-row-blue">
-            <div class="team-meta">
-              <span class="team-chip blue">BLUE SOLO</span>
-              <span class="team-player-desc" id="team-blue-player">Player 2</span>
-            </div>
-            <div class="team-stats">
-              <span class="team-sunk-score" id="team-blue-sunk">0</span>
-              <span class="team-pts-score" id="team-blue-pts">0 pts</span>
-            </div>
-          </div>
-        </div>
+      <div class="at-table-head">
+        <span class="at-col-flag">&#129380;</span>
+        <span class="at-col-num">#</span>
+        <span class="at-col-dist">DIST</span>
+        <span class="at-col-rec">PTS</span>
+      </div>
 
-        <div class="divider"></div>
+      <!-- 10 Compact Cup Target Rows -->
+      <div id="cup-selector-strip" class="at-list">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </aside>
 
-        <!-- Live Round Stats -->
-        <div class="stats-grid">
-          <div class="stat-box">
-            <span class="stat-val" id="stat-shots-total">0</span>
-            <span class="stat-lbl">SHOTS</span>
-          </div>
-          <div class="stat-box">
-            <span class="stat-val" id="stat-accuracy">0%</span>
-            <span class="stat-lbl">ACCURACY</span>
-          </div>
-          <div class="stat-box highlight">
-            <span class="stat-val" id="stat-bounces">0</span>
-            <span class="stat-lbl">BOUNCES</span>
-          </div>
-          <div class="stat-box fire">
-            <span class="stat-val" id="stat-best-streak">0</span>
-            <span class="stat-lbl">MAX STREAK</span>
-          </div>
-        </div>
-
-        <!-- Mode Toggle & Reset -->
-        <div class="game-actions-row">
-          <button id="btn-toggle-mode" class="btn-outline-sm">Mode: Solo</button>
-          <button id="btn-reset-game" class="btn-outline-sm">New Game</button>
+    <!-- 4. BOTTOM-LEFT COMPACT "SHOT DATA" CARD -->
+    <section id="shot-data-card" class="hud-glass">
+      <div class="sd-header">
+        <span class="sd-title">Shot Data</span>
+        <div class="sd-header-actions">
+          <span class="sd-dom-summary" id="target-club-display">Wedge (56&deg;)</span>
         </div>
       </div>
+      <div class="sd-metrics-grid">
+        <div class="sd-metric">
+          <span class="sd-lbl">BALL SPEED</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="tm-speed">--</span>
+            <span class="sd-unit">MPH</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">CARRY</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="tm-carry">--</span>
+            <span class="sd-unit">YDS</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">LAUNCH</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="tm-vla">--</span>
+            <span class="sd-unit">DEG</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">SPIN</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="tm-spin">--</span>
+            <span class="sd-unit">RPM</span>
+          </div>
+        </div>
+        <div class="sd-metric">
+          <span class="sd-lbl">OFFLINE</span>
+          <div class="sd-val-row">
+            <span class="sd-val" id="tm-offline">0.0</span>
+            <span class="sd-unit">YDS</span>
+          </div>
+        </div>
+      </div>
+      <!-- Hidden compatibility spans -->
+      <div class="sr-only-compat">
+        <span id="tm-hla">0.0&deg;</span>
+        <span id="tm-apex">--</span>
+        <span id="mode-badge">SOLO</span>
+        <span id="streak-badge"></span>
+        <span id="stat-shots-total">0</span>
+        <span id="stat-bounces">0</span>
+        <button id="btn-aim-left"></button>
+        <button id="btn-center-aim"></button>
+        <button id="btn-aim-right"></button>
+      </div>
+    </section>
+
+    <!-- 5. BOTTOM-CENTER ACTIVE PLAYER / STREAK BANNER -->
+    <section id="active-player-banner" class="hud-glass red">
+      <div id="player-indicator" class="ap-main-row red">
+        <div class="ap-team-badge">
+          <span class="ap-shield-icon" id="team-dot">&#129380;</span>
+          <span id="player-name">RED SOLO</span>
+        </div>
+        <div class="ap-shot-box">
+          <span class="ap-shot-text" id="ap-shot-counter">SHOT 1/2</span>
+          <div class="shot-pips">
+            <span class="shot-pip active" id="pip-1"></span>
+            <span class="shot-pip" id="pip-2"></span>
+            <span class="shot-pip bonus" id="pip-3" style="display: none;">&#9733;</span>
+          </div>
+        </div>
+      </div>
+      <div class="ap-streak-ribbon">
+        <span id="streak-ribbon-text">&#128293; ACTIVE TURN &bull; SHOT 1 OF 2</span>
+      </div>
+    </section>
+
+    <!-- 6. BOTTOM-RIGHT TACTICAL CALLOUT -->
+    <aside id="tactical-callout" class="hud-glass">
+      <button type="button" class="tac-row defend" id="btn-sim-swish" title="Simulate Direct Swish Shot (Spacebar)">
+        <span class="tac-icon red">&#127919;</span>
+        <span class="tac-text" id="tac-text-swish">SWISH CUP #1 (DIRECT) - 15 YD</span>
+      </button>
+      <button type="button" class="tac-row capture" id="btn-sim-bounce" title="Simulate Runway Bounce Shot (B key)">
+        <span class="tac-icon blue">&#9889;</span>
+        <span class="tac-text" id="tac-text-bounce">BOUNCE CUP #1 (DECK) - 15 YD</span>
+      </button>
     </aside>
 
     <!-- Center Big Event Toast / Banner -->
-    <div id="event-toast" class="event-toast" style="display: none;">
-      <div class="toast-content">
-        <div class="toast-title" id="toast-title">SWISH!</div>
-        <div class="toast-subtitle" id="toast-subtitle">Cup #1 Eliminated!</div>
-        <div class="toast-badge" id="toast-badge">+100 PTS</div>
-      </div>
+    <div id="event-toast" class="shot-banner" style="display: none;">
+      <span class="shot-banner-badge red" id="toast-title">SWISH!</span>
+      <span class="shot-banner-dist" id="toast-subtitle">Cup #1 Eliminated!</span>
+      <span class="flag-owner-pill yellow" id="toast-badge" style="margin-left: 6px;">+150 PTS</span>
     </div>
 
     <!-- Victory / Match Complete Modal -->
     <div id="modal-victory" class="modal-overlay" style="display: none;">
-      <div class="modal-card">
-        <div class="modal-glow"></div>
-        <div class="modal-icon">&#x1F3C6;&#x1F37A;</div>
-        <h1 class="modal-title" id="victory-title">RACK CLEARED!</h1>
-        <p class="modal-subtitle" id="victory-subtitle">All 10 Solo Cups Eliminated!</p>
+      <div class="game-over-card">
+        <h1 class="game-over-title red" id="victory-title">RACK CLEARED!</h1>
+        <div class="game-over-subtitle" id="victory-subtitle">All 10 Solo Cups Eliminated!</div>
 
-        <div class="victory-stats-grid">
-          <div class="v-stat">
-            <span class="v-num" id="v-winner-name">Player 1</span>
-            <span class="v-lbl">WINNER</span>
+        <div class="match-mvp-box" style="margin-top: 16px;">
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#127942; Winner:</span>
+            <span class="mvp-val" id="v-winner-name">Player 1</span>
           </div>
-          <div class="v-stat">
-            <span class="v-num" id="v-total-shots">14</span>
-            <span class="v-lbl">TOTAL SHOTS</span>
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#127919; Total Shots:</span>
+            <span class="mvp-val" id="v-total-shots">14</span>
           </div>
-          <div class="v-stat">
-            <span class="v-num" id="v-accuracy">71%</span>
-            <span class="v-lbl">ACCURACY</span>
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#128293; Accuracy:</span>
+            <span class="mvp-val" id="v-accuracy">71%</span>
           </div>
-          <div class="v-stat">
-            <span class="v-num" id="v-bounce-shots">2</span>
-            <span class="v-lbl">BOUNCE SHOTS</span>
+          <div class="mvp-row">
+            <span class="mvp-lbl">&#9889; Bounce Shots:</span>
+            <span class="mvp-val" id="v-bounce-shots">2</span>
           </div>
         </div>
 
-        <div class="modal-actions">
-          <button id="btn-play-again" class="btn-modal-primary">PLAY AGAIN</button>
-          <button id="btn-next-dist" class="btn-modal-secondary">NEXT DISTANCE (+15 YDS)</button>
+        <div class="action-buttons">
+          <button id="btn-play-again" class="btn btn-primary">PLAY AGAIN</button>
+          <button id="btn-next-dist-modal" class="btn btn-secondary">NEXT DISTANCE</button>
         </div>
       </div>
     </div>
 
-    <!-- Live Launch Monitor Telemetry Dock -->
-    <section id="telemetry-dock">
-      <div class="tm-cell">
-        <span class="tm-lbl">BALL SPEED</span>
-        <span class="tm-val" id="tm-speed">--<small>mph</small></span>
-      </div>
-      <div class="tm-cell">
-        <span class="tm-lbl">LAUNCH VLA</span>
-        <span class="tm-val" id="tm-vla">--<small>&deg;</small></span>
-      </div>
-      <div class="tm-cell">
-        <span class="tm-lbl">HLA LINE</span>
-        <span class="tm-val" id="tm-hla">--<small>&deg;</small></span>
-      </div>
-      <div class="tm-cell">
-        <span class="tm-lbl">BACKSPIN</span>
-        <span class="tm-val" id="tm-spin">--<small>rpm</small></span>
-      </div>
-      <div class="tm-cell">
-        <span class="tm-lbl">PEAK APEX</span>
-        <span class="tm-val" id="tm-apex">--<small>ft</small></span>
-      </div>
-      <div class="tm-cell highlight">
-        <span class="tm-lbl">CARRY</span>
-        <span class="tm-val" id="tm-carry">--<small>yds</small></span>
-      </div>
-      <div class="tm-cell">
-        <span class="tm-lbl">OFFLINE</span>
-        <span class="tm-val" id="tm-offline">--<small>yds</small></span>
-      </div>
-    </section>
-
-    <!-- Bottom Controls & Keybindings Helper -->
-    <footer id="bottom-bar">
-      <div class="key-hints">
-        <span class="key-badge"><kbd>SPACE</kbd> Direct Swish</span>
-        <span class="key-badge"><kbd>B</kbd> Bounce Shot</span>
-        <span class="key-badge"><kbd>C</kbd> Table Cam</span>
-        <span class="key-badge"><kbd>R</kbd> Re-Rack</span>
-        <span class="key-badge"><kbd>&larr;</kbd><kbd>&rarr;</kbd> Aim Tilt</span>
-        <span class="key-badge"><kbd>A</kbd><kbd>D</kbd> Cup</span>
-        <span class="key-badge"><kbd>M</kbd> Mute</span>
-      </div>
-      <div class="sim-controls" style="display: flex; gap: 8px;">
-        <button id="btn-sim-bounce" class="btn-hit-sim btn-bounce" title="Simulate runway bounce roll-in shot (B key)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-          </svg>
-          <span>Bounce Shot (B)</span>
-        </button>
-        <button id="btn-sim-swish" class="btn-hit-sim btn-swish" title="Simulate direct high-arc swish shot (Spacebar)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-            <circle cx="12" cy="12" r="10"></circle>
-            <circle cx="12" cy="12" r="6"></circle>
-            <circle cx="12" cy="12" r="2"></circle>
-          </svg>
-          <span>Direct Swish (Space)</span>
-        </button>
-      </div>
-    </footer>
+    <div id="top-left"></div>
   </body>
 </html>
